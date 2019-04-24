@@ -8,28 +8,31 @@ namespace AvalonRL
         private int alg;
         private int role;
         private List<int> spyLoc;
+        private int position;
 
         private static Random rng = new Random();
 
-        public RLAI(int algorithm, int role)
+        public RLAI(int algorithm, int argrole, int pos)
 	    {
-            role = role;
+            role = argrole;
             alg = algorithm;
+            position = pos;
 
 	    }
 
-        public LocateSpies(List<int> spies)
+        public void LocateSpies(List<int> spies)
         {
             //the game will only call this for spies and merlin
             spyLoc = spies;
         }
 
-        public bool CastVote(Gamestate state)
+        public bool CastVote(GameState state)
         {
-            return rng.Next(2);
+            if (state.GetCurrentRound() == 4) return true;
+            return rng.Next(2) == 1;
         }
 
-        public List<int> ChooseTeam(Gamestate state, int size)
+        public List<int> ChooseTeam(GameState state, int size)
         {
             List<int> team = new List<int>();
             int pick;
@@ -40,6 +43,24 @@ namespace AvalonRL
                 {
                     team.Add(pick);
                 }
+            }
+
+            return team;
+        }
+
+        public int MissionPlay(GameState state)
+        {
+            //only spies should be asked to play
+            return rng.Next(2);
+        }
+
+        public int PickMerlin(GameState state)
+        {
+            int guess;
+            while (true)
+            {
+                guess = rng.Next(7);
+                if (!spyLoc.Contains(guess)) return guess;
             }
         }
     }

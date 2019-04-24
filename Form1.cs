@@ -21,5 +21,29 @@ namespace AvalonRL
         {
 
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int count = 0;
+            int spyWins = 0;
+            int goodWins = 0;
+            if (Int32.TryParse(textBox1.Text, out count))
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    BotGame7 newGame = new BotGame7(0, 1);
+                    if (newGame.Play() == 0)
+                    {
+                        spyWins++;
+                    }
+                    else
+                    {
+                        goodWins++;
+                    }
+                }
+
+            }
+            MessageBox.Show(spyWins.ToString() + " | " + goodWins.ToString());
+        }
     }
 }
